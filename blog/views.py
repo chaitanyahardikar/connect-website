@@ -2,11 +2,25 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
+from django.contrib.auth.models import User
+from users.models import Profile
+
+import random
+
+items = Profile.objects.all()
+# change 3 to how many random items you want
+randusers = random.sample(list(items), 3)
+# if you want only a single random item
+#random_item = random.choice(items)
 
 
+#uses cbv
 def home(request):
+	print("1")
+	print(randusers)
 	context = {
-        'posts': Post.objects.all()
+        'posts': Post.objects.all(),
+        'randusers' : randusers,
     }
 	return render(request, 'blog/home.html', context)
 
@@ -16,6 +30,12 @@ class PostListView(LoginRequiredMixin, ListView):
 	context_object_name = 'posts'
 	ordering = '-date_posted'
 	paginate_by = 4
+
+	def get_context_data(self, **kwargs):
+		context = super(PostListView, self).get_context_data(**kwargs)
+		context['randusers'] = User.objects.order_by('?')[:4]
+		return context
+
 
 class PostDetailView(DetailView):
 	model = Post
