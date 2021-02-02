@@ -40,10 +40,19 @@ class PostListView(LoginRequiredMixin, ListView):
 class PostDetailView(DetailView):
 	model = Post
 	context_object_name = 'post'
+	def get_context_data(self, **kwargs):
+		context = super(PostDetailView, self).get_context_data(**kwargs)
+		context['randusers'] = User.objects.order_by('?')[:4]
+		return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
 	model = Post
 	fields = ['title', 'content', 'image']
+
+	def get_context_data(self, **kwargs):
+		context = super(PostCreateView, self).get_context_data(**kwargs)
+		context['randusers'] = User.objects.order_by('?')[:4]
+		return context
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user
@@ -52,6 +61,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = Post
 	fields = ['title', 'content', 'image']
+
+	def get_context_data(self, **kwargs):
+		context = super(PostUpdateView, self).get_context_data(**kwargs)
+		context['randusers'] = User.objects.order_by('?')[:4]
+		return context
 
 	def form_valid(self, form):
 		form.instance.author = self.request.user
@@ -67,6 +81,11 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 	model = Post
 	context_object_name = 'post'
 	success_url = '/'
+
+	def get_context_data(self, **kwargs):
+		context = super(PostDeleteView, self).get_context_data(**kwargs)
+		context['randusers'] = User.objects.order_by('?')[:4]
+		return context
 
 	def test_func(self):
 		post = self.get_object()

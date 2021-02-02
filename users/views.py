@@ -28,7 +28,7 @@ def profile(request, pk):
 			u_form.save()
 			p_form.save()
 			messages.success(request, f'Your account has been updated!')
-			return redirect('profile')
+			return redirect('profile', request.user.id)
 
 	else:
 		u_form = UserUpdateForm(instance=request.user)
@@ -42,7 +42,8 @@ def profile(request, pk):
 		'p_form': p_form,
 		'user_posts' : user_posts,
 		'user' : user,
-		'profileuser' : profileuser
+		'profileuser' : profileuser,
+		'randusers' : User.objects.order_by('?')[:4]
 	}
 
 	return render(request, 'users/profile.html', context)
