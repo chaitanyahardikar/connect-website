@@ -9,7 +9,9 @@ import random
 
 items = Profile.objects.all()
 # change 3 to how many random items you want
-randusers = random.sample(list(items), 3)
+if items.count() >= 3:
+	randusers = random.sample(list(items), 3)
+
 # if you want only a single random item
 #random_item = random.choice(items)
 

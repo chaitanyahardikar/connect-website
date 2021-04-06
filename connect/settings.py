@@ -76,14 +76,25 @@ WSGI_APPLICATION = 'connect.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db2.sqlite3',
     }
 }
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'connect_db',
+        'USER': 'djangouser',
+        'PASSWORD': 'connect123',
+        'HOST': '127.0.0.1',
+        'PORT': '',
+        'OPTIONS': {'charset': 'utf8mb4'},
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
