@@ -9,8 +9,8 @@ import random
 
 items = Profile.objects.all()
 # change 3 to how many random items you want
-if items.count() >= 3:
-	randusers = random.sample(list(items), 3)
+if items.count() >= 5:
+	randusers = random.sample(list(items), 5)
 
 # if you want only a single random item
 #random_item = random.choice(items)
@@ -35,7 +35,7 @@ class PostListView(LoginRequiredMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super(PostListView, self).get_context_data(**kwargs)
-		context['randusers'] = User.objects.order_by('?')[:4]
+		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
 
@@ -44,7 +44,7 @@ class PostDetailView(DetailView):
 	context_object_name = 'post'
 	def get_context_data(self, **kwargs):
 		context = super(PostDetailView, self).get_context_data(**kwargs)
-		context['randusers'] = User.objects.order_by('?')[:4]
+		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -53,7 +53,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(PostCreateView, self).get_context_data(**kwargs)
-		context['randusers'] = User.objects.order_by('?')[:4]
+		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
 	def form_valid(self, form):
@@ -66,7 +66,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(PostUpdateView, self).get_context_data(**kwargs)
-		context['randusers'] = User.objects.order_by('?')[:4]
+		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
 	def form_valid(self, form):
@@ -86,7 +86,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 	def get_context_data(self, **kwargs):
 		context = super(PostDeleteView, self).get_context_data(**kwargs)
-		context['randusers'] = User.objects.order_by('?')[:4]
+		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
 	def test_func(self):

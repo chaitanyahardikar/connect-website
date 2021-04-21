@@ -1,0 +1,80 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <!-- Modal Code -->
+    <div>
+      <button id="myBtn">View friend requests</button>
+
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">            
+            <h2 style="color: #05060f">Friend Requests</h2>
+            <span class="close">&times;</span>
+          </div>
+          <div class="modal-body">
+            {% if user_req_list %}
+                <ul class="list-group">
+                  {% for ureq in user_req_list %}
+                  <li class="list-group-item list-group-item-light">
+                      <img class="rounded-circle article-img" src="{{ ureq.profile.image.url }}">
+                    <a class="mr-2" href="{% url 'profile' ureq.id %}">{{ ureq.username }}</a>
+                    <small
+                      ><a
+                        class="btn btn-success mr-2"
+                        href="/users/friend-request/accept/{{ ureq.id }}"
+                        >Accept Request</a
+                      ></small
+                    >
+                    <small
+                      ><a
+                        class="btn btn-danger"
+                        href="/users/friend-request/delete/{{ ureq.id }}"
+                        >Reject Request</a
+                      ></small
+                    >
+                  </li>
+                  {% endfor %}
+                </ul>
+            {% else %}
+              <h5>
+                <i
+                  >You have no friend requests yet!</i
+                >
+              </h5>
+            {% endif %}
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+    <br>
+    <div class="content-section">
+        {% if friends %}
+    	  <p class='text'><h3>Friends : </h3>
+              <ul class="list-group">
+                {% for u in friends %}
+                <li class="list-group-item list-group-item-light">
+                    <img class="rounded-circle article-img" src="{{ u.image.url }}">
+                  <a class="mr-2" href="{% url 'profile' u.user.id %}">{{ u.user.username }}</a>
+                  <small
+                    ><a
+                      class="btn btn-danger float-right"
+                      href="{% url 'delete_friend' u.user.id %}"
+                      >UnFriend</a
+                    ></small
+                  >
+                </li>
+                {% endfor %}
+              </ul>
+            </p>
+        {% else %}
+          <h5>
+            <i
+              >You have no friends yet!</i
+            >
+          </h5>
+        {% endif %}
+	   </div>
+{% endblock content %}

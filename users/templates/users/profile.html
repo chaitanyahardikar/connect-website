@@ -7,6 +7,51 @@
 	    <div class="media-body">
 	      <h2 class="account-heading">{{ profileuser.username }}</h2>
 	      <p class="text-secondary">{{ profileuser.email }}</p>
+
+          <hr class="my-2" />
+              {% if request.user == u %}
+              <br>
+              {% else %} {% if button_status == 'not_friend' %}
+              <small
+                ><a
+                  class="btn btn-primary"
+                  href="/users/friend-request/send/{{ u.id }}"
+                  >Add Friend</a
+                ></small
+              >
+              {% elif button_status == 'friend_request_sent' %}
+              <small
+                ><a
+                  class="btn btn-warning"
+                  href="/users/friend-request/cancel/{{ u.id }}"
+                  >Cancel Request</a
+                ></small
+              >
+              {% elif button_status == 'friend_request_received' %}
+              <small
+                ><a
+                  class="btn btn-success mr-2"
+                  href="/users/friend-request/accept/{{ u.id }}"
+                  >Accept Request</a
+                ></small
+              >
+              <small
+                ><a
+                  class="btn btn-danger"
+                  href="/users/friend-request/delete/{{ u.id }}"
+                  >Reject Request</a
+                ></small
+              >
+              {% else %}
+              <small
+                ><a
+                  class="btn btn-danger"
+                  href="/users/friend/delete/{{ u.id }}"
+                  >UnFriend</a
+                ></small
+              >
+              {% endif %} {% endif %}
+
 	    </div>
 	  </div>
 	    <!-- FORM HERE -->
@@ -24,23 +69,33 @@
         </form>
         {% endifequal %}
         <!-- USER POSTS -->
-        <br>
+        <hr>
         <h2 align="justify">Posts</h2>
-        {% for post in user_posts %}
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-        {% if post.image %}
-          <img style="width:100%; height:auto;" src="{{ post.image.url }}">
+        {% if user_posts %}
+            {% for post in user_posts %}
+            <article class="media content-section">
+              <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+              <div class="media-body">
+                <div class="article-metadata">
+                  <a class="mr-2" href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
+                  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                </div>
+                <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            {% if post.image %}
+              <img style="width:100%; height:auto;" src="{{ post.image.url }}">
+            {% endif %}
+                <p class="article-content">{{ post.content }}</p>
+              </div>
+            </article>
+            {% endfor %}
+        {% else %}
+            {% ifequal user profileuser %}
+                <h7>You haven't posted anything yet! <br>Click </h7>
+                <a href="{% url 'post-create' %}">here</a>
+                <h7> to create your first post</h7>
+            {% else %}
+                <h6>{{ profileuser.username }} hasn't posted anything yet!</h6>
+            {% endifequal %}
         {% endif %}
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
-        {% endfor %}
 	</div>
 {% endblock content %}
