@@ -7,6 +7,7 @@
 	    <div class="media-body">
 	      <h2 class="account-heading">{{ profileuser.username }}</h2>
 	      <p class="text-secondary">{{ profileuser.email }}</p>
+        <p class="text-start">Bio : {{ profileuser.profile.bio }}</p>
 
           <hr class="my-2" />
               {% if request.user == u %}

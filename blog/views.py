@@ -9,8 +9,9 @@ import random
 
 items = Profile.objects.all()
 # change 3 to how many random items you want
-if items.count() >= 5:
-	randusers = random.sample(list(items), 5)
+#if items.count() >= 5:
+#	randusers = random.sample(list(items), 5) REASON FOR NOT USING: this causes problems
+# in creating new columns in db
 
 # if you want only a single random item
 #random_item = random.choice(items)
@@ -22,7 +23,7 @@ def home(request):
 	print(randusers)
 	context = {
         'posts': Post.objects.all(),
-        'randusers' : randusers,
+        'randusers' : User.objects.order_by('?')[:5],
     }
 	return render(request, 'blog/home.html', context)
 
