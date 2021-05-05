@@ -156,3 +156,14 @@ a.article-title:hover {
 }
 
 .modal-body {padding: 2px 16px;}
+
+.fa-heart-o {
+  color: red;
+  cursor: pointer;
+}
+
+.fa-heart {
+  color: red;
+  cursor: pointer;
+}
+

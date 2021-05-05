@@ -4,6 +4,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post
 from django.contrib.auth.models import User
 from users.models import Profile
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 import random
 
@@ -37,6 +42,13 @@ class PostListView(LoginRequiredMixin, ListView):
 	def get_context_data(self, **kwargs):
 		context = super(PostListView, self).get_context_data(**kwargs)
 		context['randusers'] = User.objects.order_by('?')[:5]
+		
+		# likes_connected = get_object_or_404(Post, id=self.kwargs['pk'])
+		# liked = False
+		# if likes_connected.likes.filter(id=self.request.user.id).exists():
+		# 	liked = True
+		# context['number_of_likes'] = likes_connected.number_of_likes()
+		# context['post_is_liked'] = liked
 		return context
 
 
@@ -45,6 +57,13 @@ class PostDetailView(DetailView):
 	context_object_name = 'post'
 	def get_context_data(self, **kwargs):
 		context = super(PostDetailView, self).get_context_data(**kwargs)
+
+		likes_connected = get_object_or_404(Post, id=self.kwargs['pk'])
+		liked = False
+		if likes_connected.likes.filter(id=self.request.user.id).exists():
+			liked = True
+		context['number_of_likes'] = likes_connected.number_of_likes()
+		context['post_is_liked'] = liked
 		context['randusers'] = User.objects.order_by('?')[:5]
 		return context
 
@@ -99,3 +118,12 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def about(request):
 	return render(request, 'blog/about.html', {'title': 'About'})
+
+def PostLike(request, pk):
+    post = get_object_or_404(Post, id=request.POST.get('post_id'))
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+
+    return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))

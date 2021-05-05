@@ -52,7 +52,7 @@
     <br>
     <div class="content-section">
         {% if friends %}
-    	  <p class='text'><h3>Friends : </h3>
+    	  <p class='text'><h3>Friends : ( {{ friends.count }} )</h3>
               <ul class="list-group">
                 {% for u in friends %}
                 <li class="list-group-item list-group-item-light">
